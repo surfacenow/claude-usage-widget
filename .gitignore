@@ -1,0 +1,12 @@
+.env
+__pycache__/
+*.pyc
+webview_data/
+usage_data.json
+fetch_status.txt
+scan_trigger
+fetcher.log
+node_modules/
+dist/
+bin/
+obj/
