@@ -105,9 +105,18 @@ class MiniInvader(tk.Canvas):
             self._tick()
 
     def stop(self):
+        """停止＋グレーアウト"""
+        self.running = False
+        self.frame_idx = 0
+        self.color_body = "#555555"
+        self.color_eye = "#777777"
+        self._update_frame()
+
+    def idle(self):
         """アイドル = ゆっくりパタパタ（常にalive感）"""
         self.interval = 800
         self.color_body = self.base_body
+        self.color_eye = "#FFFFFF"
         self._update_frame()
         if not self.running:
             self.running = True
@@ -312,7 +321,7 @@ class Overlay:
         """オーバーレイ側のAuto表示切替"""
         self.auto_running = not self.auto_running
         if self.auto_running:
-            self.spinner.start(speed="slow")
+            self.spinner.idle()
         else:
             self.spinner.stop()
 
@@ -352,12 +361,12 @@ class Overlay:
             self.spinner.start(speed="fast")
         elif s.startswith("OK"):
             if self.auto_running:
-                self.spinner.start(speed="slow")
+                self.spinner.idle()
             else:
                 self.spinner.stop()
         elif s.startswith("ERROR"):
             if self.auto_running:
-                self.spinner.start(speed="slow")
+                self.spinner.idle()
             else:
                 self.spinner.stop()
 
