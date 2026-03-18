@@ -182,7 +182,7 @@ class Overlay:
         sw = user32.GetSystemMetrics(0)
         sh = user32.GetSystemMetrics(1)
 
-        w, h = 240, 38
+        w, h = 200, 26
         x = sw - w - 220
         y = sh - h
 
@@ -193,71 +193,69 @@ class Overlay:
         self.root.geometry(f"{w}x{h}+{x}+{y}")
 
         font = ("Consolas", 8, "bold")
-        sfont = ("Consolas", 7)
 
-        # gridで整列
-        grid = tk.Frame(self.root, bg=T)
-        grid.pack(fill="both", expand=True)
-        grid.rowconfigure(0, pad=0)
-        grid.rowconfigure(1, pad=0)
+        # 行のY座標（2行を詰めて配置）
+        row_h = 13
+        y0 = 0      # 5h行
+        y1 = row_h   # 7d行
 
-        # グリップ（2行にまたがる）
-        # グリップ用フレーム（透過色と違う暗色で塗ってクリック可能に）
-        # グリップ（透過背景、ドラッグはテキスト部分のみ）
-        self.grip = tk.Label(grid, text="⠿", font=("Consolas", 16),
-            fg=CYAN, bg=T, cursor="fleur")
-        self.grip.grid(row=0, column=0, rowspan=2, sticky="ns", padx=(0,1))
+        # レイアウトX座標
+        grip_x = 0
+        lbl_x = 12
+        bar_x = 28
+        bar_w = 65
+        pct_x = 96
+        rst_x = 132
+        inv_x = 175
 
-        # 5h行
-        self.lbl_5h = tk.Label(grid, text="5h", font=font, fg=MUTED, bg=T, width=2, anchor="w")
-        self.lbl_5h.grid(row=0, column=1, sticky="w")
+        # グリップ（Canvasドットパターン）
+        self.grip = tk.Canvas(self.root, width=10, height=h,
+            bg=T, highlightthickness=0, cursor="fleur")
+        self.grip.place(x=grip_x, y=0)
+        dot_r = 1.5
+        for dx in [3, 7]:
+            for dy in range(4, h - 2, 5):
+                self.grip.create_oval(dx-dot_r, dy-dot_r, dx+dot_r, dy+dot_r,
+                    fill=CYAN, outline="")
 
-        bar1 = tk.Frame(grid, bg=BAR_BG, height=5, width=65)
-        bar1.grid(row=0, column=2, padx=3, sticky="w")
-        bar1.grid_propagate(False)
+        # ── 5h行 ──
+        self.lbl_5h = tk.Label(self.root, text="5h", font=font, fg=MUTED, bg=T, anchor="w", pady=0, padx=0)
+        self.lbl_5h.place(x=lbl_x, y=y0, height=row_h)
+
+        bar1 = tk.Frame(self.root, bg=BAR_BG, height=5, width=bar_w)
+        bar1.place(x=bar_x, y=y0+4, width=bar_w, height=5)
         self.bar_5h = tk.Frame(bar1, bg=CYAN, height=5)
         self.bar_5h.place(x=0, y=0, relwidth=0, relheight=1)
 
-        self.pct_5h = tk.Label(grid, text="--%", font=font, fg=MUTED, bg=T, width=4, anchor="e")
-        self.pct_5h.grid(row=0, column=3, sticky="e")
+        self.pct_5h = tk.Label(self.root, text="--%", font=font, fg=MUTED, bg=T, anchor="e", pady=0, padx=0)
+        self.pct_5h.place(x=pct_x, y=y0, width=35, height=row_h)
 
-        # リセット時間（シャドウ付き）
-        rst1_frame = tk.Frame(grid, bg=T)
-        rst1_frame.grid(row=0, column=4, padx=(2,0), sticky="e")
-        self.rst_5h_shadow = tk.Label(rst1_frame, text="", font=("Consolas", 8, "bold"),
-            fg="#222222", bg=T, anchor="e")
-        self.rst_5h_shadow.place(x=1, y=1)
-        self.rst_5h = tk.Label(rst1_frame, text="", font=("Consolas", 8, "bold"),
-            fg="#BBBBBB", bg=T, anchor="e")
-        self.rst_5h.pack()
+        self.rst_5h_shadow = tk.Label(self.root, text="", font=font, fg="#222222", bg=T, anchor="e", pady=0, padx=0)
+        self.rst_5h_shadow.place(x=rst_x+1, y=y0+1, height=row_h)
+        self.rst_5h = tk.Label(self.root, text="", font=font, fg="#BBBBBB", bg=T, anchor="e", pady=0, padx=0)
+        self.rst_5h.place(x=rst_x, y=y0, height=row_h)
 
-        # インベーダー（2行にまたがって右端）
-        self.spinner = MiniInvader(grid, px=3,
-            color_body=CYAN, color_eye="#FFFFFF", bg_color=T)
-        self.spinner.grid(row=0, column=6, rowspan=2, padx=(3,0))
+        # ── 7d行 ──
+        self.lbl_7d = tk.Label(self.root, text="7d", font=font, fg=MUTED, bg=T, anchor="w", pady=0, padx=0)
+        self.lbl_7d.place(x=lbl_x, y=y1, height=row_h)
 
-        # 7d行
-        self.lbl_7d = tk.Label(grid, text="7d", font=font, fg=MUTED, bg=T, width=2, anchor="w")
-        self.lbl_7d.grid(row=1, column=1, sticky="w")
-
-        bar2 = tk.Frame(grid, bg=BAR_BG, height=5, width=65)
-        bar2.grid(row=1, column=2, padx=3, sticky="w")
-        bar2.grid_propagate(False)
+        bar2 = tk.Frame(self.root, bg=BAR_BG, height=5, width=bar_w)
+        bar2.place(x=bar_x, y=y1+4, width=bar_w, height=5)
         self.bar_7d = tk.Frame(bar2, bg=CYAN, height=5)
         self.bar_7d.place(x=0, y=0, relwidth=0, relheight=1)
 
-        self.pct_7d = tk.Label(grid, text="--%", font=font, fg=MUTED, bg=T, width=4, anchor="e")
-        self.pct_7d.grid(row=1, column=3, sticky="e")
+        self.pct_7d = tk.Label(self.root, text="--%", font=font, fg=MUTED, bg=T, anchor="e", pady=0, padx=0)
+        self.pct_7d.place(x=pct_x, y=y1, width=35, height=row_h)
 
-        # リセット時間（シャドウ付き）
-        rst2_frame = tk.Frame(grid, bg=T)
-        rst2_frame.grid(row=1, column=4, padx=(2,0), sticky="e")
-        self.rst_7d_shadow = tk.Label(rst2_frame, text="", font=("Consolas", 8, "bold"),
-            fg="#222222", bg=T, anchor="e")
-        self.rst_7d_shadow.place(x=1, y=1)
-        self.rst_7d = tk.Label(rst2_frame, text="", font=("Consolas", 8, "bold"),
-            fg="#BBBBBB", bg=T, anchor="e")
-        self.rst_7d.pack()
+        self.rst_7d_shadow = tk.Label(self.root, text="", font=font, fg="#222222", bg=T, anchor="e", pady=0, padx=0)
+        self.rst_7d_shadow.place(x=rst_x+1, y=y1+1, height=row_h)
+        self.rst_7d = tk.Label(self.root, text="", font=font, fg="#BBBBBB", bg=T, anchor="e", pady=0, padx=0)
+        self.rst_7d.place(x=rst_x, y=y1, height=row_h)
+
+        # インベーダー
+        self.spinner = MiniInvader(self.root, px=3,
+            color_body=CYAN, color_eye="#FFFFFF", bg_color=T)
+        self.spinner.place(x=inv_x, y=(h-21)//2)
 
         # ── イベント ──
         self.grip.bind("<ButtonPress-1>", self._start_drag)
