@@ -1,12 +1,18 @@
-.env
+# Runtime / generated
+fetcher.log
+fetch_status.txt
+usage_data.json
+scan_trigger
 __pycache__/
 *.pyc
-webview_data/
-usage_data.json
-fetch_status.txt
-scan_trigger
-fetcher.log
-node_modules/
-dist/
+.env
+
+# Build artifacts
 bin/
 obj/
+dist/
+node_modules/
+
+# OS
+Thumbs.db
+Desktop.ini

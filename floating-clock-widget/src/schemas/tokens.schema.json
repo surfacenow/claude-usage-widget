@@ -1,0 +1,139 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://floating-clock-widget/schemas/tokens.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "colors",
+    "typography",
+    "radius",
+    "shadow",
+    "blur",
+    "motion"
+  ],
+  "properties": {
+    "colors": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "panel",
+        "textMain",
+        "textSub",
+        "accentA",
+        "accentB",
+        "accentC"
+      ],
+      "properties": {
+        "panel": {
+          "type": "string",
+          "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$"
+        },
+        "textMain": {
+          "type": "string",
+          "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$"
+        },
+        "textSub": {
+          "type": "string",
+          "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$"
+        },
+        "accentA": {
+          "type": "string",
+          "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$"
+        },
+        "accentB": {
+          "type": "string",
+          "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$"
+        },
+        "accentC": {
+          "type": "string",
+          "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$"
+        }
+      }
+    },
+    "typography": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "clockFont",
+        "uiFont"
+      ],
+      "properties": {
+        "clockFont": {
+          "type": "string",
+          "minLength": 1
+        },
+        "uiFont": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "radius": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "panel"
+      ],
+      "properties": {
+        "panel": {
+          "type": "integer",
+          "minimum": 8,
+          "maximum": 64
+        }
+      }
+    },
+    "shadow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "panelGlow"
+      ],
+      "properties": {
+        "panelGlow": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "blur": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "panelBackdrop"
+      ],
+      "properties": {
+        "panelBackdrop": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 40
+        }
+      }
+    },
+    "motion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "driftPx",
+        "driftCycleSec",
+        "locatorPulseSec"
+      ],
+      "properties": {
+        "driftPx": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 16
+        },
+        "driftCycleSec": {
+          "type": "number",
+          "minimum": 4,
+          "maximum": 60
+        },
+        "locatorPulseSec": {
+          "type": "number",
+          "minimum": 2,
+          "maximum": 60
+        }
+      }
+    }
+  }
+}

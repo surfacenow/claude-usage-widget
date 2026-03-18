@@ -1,0 +1,435 @@
+:root {
+  --panel-bg: #0b0b12dd;
+  --text-main: #f7fdff;
+  --text-sub: #9cb6c9;
+  --accent-a: #00e5ff;
+  --accent-b: #ff3dff;
+  --accent-c: #c8ff3d;
+  --panel-radius: 22px;
+  --panel-shadow: 0 0 18px rgba(0, 229, 255, 0.2), 0 0 34px rgba(255, 61, 255, 0.14);
+  --panel-blur: 10px;
+  --clock-font: "Orbitron", "Segoe UI", sans-serif;
+  --ui-font: "Rajdhani", "Segoe UI", sans-serif;
+  --drift-px: 4px;
+  --drift-cycle-sec: 14s;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--ui-font);
+  color: var(--text-main);
+  background: transparent;
+  overflow: hidden;
+}
+
+.scene-bg {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 24% 12%, rgba(0, 229, 255, 0.2), transparent 46%),
+    radial-gradient(circle at 86% 80%, rgba(255, 61, 255, 0.16), transparent 48%),
+    linear-gradient(145deg, rgba(7, 7, 12, 0.48), rgba(15, 16, 28, 0.66));
+}
+
+.widget-shell {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+
+.clock-panel {
+  position: relative;
+  width: min(92vw, 340px);
+  min-height: 172px;
+  padding: 14px 14px 12px;
+  border-radius: var(--panel-radius);
+  background: linear-gradient(150deg, rgba(13, 15, 23, 0.96), var(--panel-bg));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.38),
+    0 0 14px rgba(0, 229, 255, 0.14),
+    0 0 22px rgba(255, 61, 255, 0.1);
+  backdrop-filter: blur(var(--panel-blur));
+  -webkit-backdrop-filter: blur(var(--panel-blur));
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+  -webkit-app-region: drag;
+}
+
+.clock-panel::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: calc(var(--panel-radius) + 4px);
+  opacity: 0;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(0, 229, 255, 0.28), rgba(255, 61, 255, 0.08), transparent 64%);
+}
+
+.clock-panel.drift-on {
+  animation: panel-drift var(--drift-cycle-sec) ease-in-out infinite;
+}
+
+.clock-panel.locator-pulse::before {
+  animation: locator-pulse 640ms ease-out 1;
+}
+
+.panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.panel-head-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  -webkit-app-region: no-drag;
+}
+
+.brand {
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-a);
+}
+
+.version {
+  font-size: 12px;
+  color: var(--text-sub);
+}
+
+.clock-stack {
+  margin-top: 6px;
+}
+
+.clock-time {
+  margin: 0;
+  font-family: var(--clock-font);
+  font-size: clamp(36px, 10vw, 52px);
+  letter-spacing: 0.06em;
+  line-height: 1.04;
+  text-shadow: 0 0 10px rgba(0, 229, 255, 0.28);
+}
+
+.clock-date {
+  margin: 3px 0 0;
+  font-size: 14px;
+  color: var(--text-sub);
+  letter-spacing: 0.06em;
+}
+
+.panel-actions {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  align-items: end;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--text-sub);
+}
+
+select,
+.btn {
+  min-height: 44px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(9, 13, 23, 0.86);
+  color: var(--text-main);
+  font: inherit;
+}
+
+.panel-actions,
+.panel-actions *,
+select,
+.btn,
+.modal,
+.modal * {
+  -webkit-app-region: no-drag;
+}
+
+select {
+  width: 100%;
+  padding: 0 12px;
+}
+
+.btn {
+  padding: 0 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 200ms ease, background-color 200ms ease, opacity 200ms ease;
+}
+
+.btn:hover:not(:disabled),
+.btn:focus-visible {
+  border-color: var(--accent-a);
+}
+
+.btn:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--accent-c);
+  outline-offset: 2px;
+}
+
+.btn-primary {
+  background: linear-gradient(120deg, rgba(0, 229, 255, 0.24), rgba(255, 61, 255, 0.28));
+}
+
+.btn-ghost {
+  min-height: 36px;
+  border-radius: 10px;
+  padding: 0 10px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.btn-lite {
+  min-height: 30px;
+  border-radius: 9px;
+  padding: 0 10px;
+  border-color: rgba(0, 229, 255, 0.44);
+  background: rgba(2, 35, 44, 0.72);
+  color: #d5fdff;
+}
+
+.btn-lite.active,
+.btn-lite:hover:not(:disabled),
+.btn-lite:focus-visible {
+  border-color: var(--accent-c);
+}
+
+.btn-exit {
+  min-height: 30px;
+  border-radius: 9px;
+  padding: 0 10px;
+  border-color: rgba(255, 158, 197, 0.44);
+  background: rgba(58, 12, 30, 0.68);
+  color: #ffd6e8;
+}
+
+.btn-exit:hover:not(:disabled),
+.btn-exit:focus-visible {
+  border-color: #ff9ec5;
+}
+
+.btn:disabled {
+  opacity: 0.48;
+  cursor: not-allowed;
+}
+
+.status-line {
+  margin: 9px 0 0;
+  min-height: 18px;
+  font-size: 13px;
+  color: var(--text-sub);
+}
+
+.status-line.error {
+  color: #ff9ec5;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 12px;
+  z-index: 40;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(2, 3, 7, 0.7);
+}
+
+.modal-card {
+  position: relative;
+  width: min(96vw, 760px);
+  max-height: 88vh;
+  overflow: auto;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: linear-gradient(160deg, rgba(12, 14, 22, 0.98), rgba(8, 11, 18, 0.96));
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.44);
+  z-index: 1;
+}
+
+.modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.modal-head h1 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.modal-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 16px;
+}
+
+.pane {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.pane h2 {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+
+.pane-note,
+.selected-zip {
+  margin: 0 0 10px;
+  font-size: 14px;
+  color: var(--text-sub);
+  word-break: break-word;
+}
+
+.check-list,
+.hint-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+
+.check-item,
+.hint-item {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 13px;
+  line-height: 1.35;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.check-item.pass {
+  border-color: rgba(124, 255, 178, 0.44);
+  color: #afffd1;
+}
+
+.check-item.fail {
+  border-color: rgba(255, 142, 193, 0.46);
+  color: #ffd0e8;
+}
+
+.check-item.pending {
+  border-color: rgba(200, 255, 61, 0.38);
+  color: #ecffc2;
+}
+
+.action-row {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+}
+
+.action-row .btn {
+  flex: 1;
+}
+
+.performance-low .scene-bg {
+  background: linear-gradient(150deg, rgba(9, 10, 16, 0.54), rgba(14, 15, 24, 0.62));
+}
+
+.performance-low .clock-panel {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.32);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.performance-low .clock-panel::before {
+  display: none;
+}
+
+.performance-low .clock-time {
+  text-shadow: none;
+}
+
+.performance-low .clock-panel.drift-on {
+  animation: none;
+}
+
+@keyframes panel-drift {
+  0% {
+    transform: translate3d(calc(var(--drift-px) * -0.4), calc(var(--drift-px) * -0.2), 0);
+  }
+  25% {
+    transform: translate3d(var(--drift-px), calc(var(--drift-px) * 0.36), 0);
+  }
+  50% {
+    transform: translate3d(calc(var(--drift-px) * -0.7), calc(var(--drift-px) * 0.8), 0);
+  }
+  75% {
+    transform: translate3d(calc(var(--drift-px) * 0.5), calc(var(--drift-px) * -0.8), 0);
+  }
+  100% {
+    transform: translate3d(calc(var(--drift-px) * -0.4), calc(var(--drift-px) * -0.2), 0);
+  }
+}
+
+@keyframes locator-pulse {
+  0% {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  45% {
+    opacity: 0.8;
+    transform: scale(1.03);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.12);
+  }
+}
+
+@media (max-width: 760px) {
+  .modal-body {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .clock-panel,
+  .clock-panel::before,
+  .btn,
+  select {
+    animation: none !important;
+    transition: none !important;
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "name": "floating-clock-widget",
+  "version": "1.0.0",
+  "description": "Floating clock widget MVP for Windows with theme import pipeline",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test",
+    "build:portable": "electron-builder --win portable"
+  },
+  "keywords": [
+    "electron",
+    "widget",
+    "clock"
+  ],
+  "author": "floating-clock-widget",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "ajv": "^8.18.0",
+    "yauzl": "^3.2.0"
+  },
+  "devDependencies": {
+    "electron": "^40.6.1",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "com.sonico.floatingclockwidget",
+    "productName": "FloatingClockWidget",
+    "asar": true,
+    "toolsets": {
+      "winCodeSign": "1.1.0"
+    },
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "signAndEditExecutable": false,
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "${productName}-${version}-portable-${arch}.${ext}"
+    }
+  }
+}
