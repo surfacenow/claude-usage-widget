@@ -1,4 +1,5 @@
 @echo off
-start "" pythonw C:\Users\Sonico\Dev\Widgets\claude_fetcher.py
+cd /d "%~dp0"
+start "" pythonw claude_fetcher.py
 timeout /t 2 /nobreak >nul
-start "" pythonw C:\Users\Sonico\Dev\Widgets\claude_overlay.py
+start "" pythonw claude_overlay.py
