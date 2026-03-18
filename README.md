@@ -28,8 +28,11 @@ pip install curl-cffi
 
 ### 2. セッションキーの取得
 
-1. ブラウザで [claude.ai](https://claude.ai) にログイン
-2. F12 → Application → Cookies → `claude.ai` → `sessionKey` をコピー
+1. ブラウザ（Chrome / Edge）で [claude.ai](https://claude.ai) にログイン
+2. `F12` キーを押して開発者ツールを開く
+3. 上部タブから **Application**（日本語: アプリケーション）を選択
+4. 左サイドバーの **Cookies** → `https://claude.ai` をクリック
+5. 一覧から `sessionKey` を探し、**Value** 列の値（`sk-ant-...` で始まる文字列）をコピー
 
 ### 3. 起動
 
