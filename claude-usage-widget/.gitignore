@@ -5,6 +5,7 @@ webview_data/
 usage_data.json
 fetch_status.txt
 scan_trigger
+overlay_config.json
 fetcher.log
 node_modules/
 dist/
